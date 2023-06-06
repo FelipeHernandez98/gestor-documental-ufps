@@ -1,4 +1,4 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: 'factor'})
 export class Factor {
@@ -6,6 +6,7 @@ export class Factor {
     @Column('int',{
         unique: true
     })
+    @PrimaryColumn()
     factor_id: number;
 
     @Column('int')
@@ -21,5 +22,5 @@ export class Factor {
     weighing: number;
 
     @Column('boolean')
-    editanle: boolean;
+    editable: boolean;
 }

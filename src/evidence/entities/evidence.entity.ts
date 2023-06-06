@@ -1,4 +1,4 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({name: 'evidence'})
 export class Evidence {
@@ -6,6 +6,7 @@ export class Evidence {
     @Column('int',{
         unique: true
     })
+    @PrimaryColumn()
     evidence_id: number;
 
     @Column('text')

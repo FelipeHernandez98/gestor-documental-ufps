@@ -1,4 +1,4 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({name: 'customer'})
 export class Customer {
@@ -6,6 +6,7 @@ export class Customer {
     @Column('int',{
         unique: true
     })
+    @PrimaryColumn()
     customer_id: number;
 
     @Column('int')

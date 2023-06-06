@@ -1,26 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateFactorDto } from './dto/create-factor.dto';
 import { UpdateFactorDto } from './dto/update-factor.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Factor } from './entities/factor.entity';
 
 @Injectable()
 export class FactorService {
-  create(createFactorDto: CreateFactorDto) {
-    return 'This action adds a new factor';
+
+  private readonly logger = new Logger('FactorService');
+
+  constructor(
+    @InjectRepository(Factor)
+    private readonly factorRepository: Repository<Factor>,
+    private readonly dataSource: DataSource
+  ){}
+
+  async create(createFactorDto: CreateFactorDto) {
+    try {
+      const factor = await this.factorRepository.create(createFactorDto);
+      await this.factorRepository.save(factor);
+      return factor;
+    } catch (error) {
+      this.handleDBExceptions(error)
+    }
   }
 
-  findAll() {
-    return `This action returns all factor`;
+  async findAll() {
+    const factor = await this.factorRepository.find();
+    if(factor.length == 0){
+      return "No hay registros en la BD"
+    }else {
+      return factor;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} factor`;
+  async findOne(id: number) {
+    const factor = await this.factorRepository.findBy({ factor_id: id})
+    if( !factor ) throw new NotFoundException(`El factor con id ${id} no existe`); 
+    return factor;
   }
 
-  update(id: number, updateFactorDto: UpdateFactorDto) {
-    return `This action updates a #${id} factor`;
+  async update(id: number, updateFactorDto: UpdateFactorDto) {
+    const factor = await this.factorRepository.findOne({ where: {factor_id: id}})
+    const factorActualizado = { ...factor, ...updateFactorDto }
+    if( !factor ) throw new NotFoundException(`El factor con id ${id} no existe`)
+    try {
+      await this.factorRepository.save(factorActualizado);
+      return factorActualizado;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} factor`;
+  async remove(id: number) {
+    const factor = await this.findOne(id);
+    return await this.factorRepository.remove(factor);
+  }
+
+  private handleDBExceptions ( error: any ){
+    if(error.code === '23505'){
+      throw new BadRequestException(error.detail);
+    }
+    
+    this.logger.error(error)
+    throw new InternalServerErrorException('Error desconocido, revisar logs del servidor');
   }
 }

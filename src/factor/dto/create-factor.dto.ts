@@ -1,9 +1,9 @@
-import { IsBoolean, IsDecimal, IsString, Max, MaxLength, Min } from "class-validator";
+import { IsBoolean, IsNumber, IsString, Max, MaxLength, Min } from "class-validator";
 
 export class CreateFactorDto {
 
-    @IsDecimal()
-    @Min(1)
+    @IsNumber()
+    @Min(0)
     @Max(11)
     agreement_id: number;
 
@@ -15,11 +15,11 @@ export class CreateFactorDto {
     @MaxLength(2000)
     description: string;
 
-    @IsDecimal()
+    @IsNumber()
     @Min(1)
     @Max(11)
     weighing: number;
 
     @IsBoolean()
-    editanle: boolean;
+    editable: boolean;
 }

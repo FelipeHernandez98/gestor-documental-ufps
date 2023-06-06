@@ -1,4 +1,4 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({name: ' department'})
 export class Department {
@@ -6,17 +6,18 @@ export class Department {
     @Column('int',{
         unique: true
     })
+    @PrimaryColumn()
     department_id: number;
 
     @Column('int')
     faculty_id: number;
 
-    @Column('string')
+    @Column('text')
     dean: string;
     
-    @Column('string')
+    @Column('text')
     email: string;
     
-    @Column('string')
+    @Column('text')
     name: string;
 }

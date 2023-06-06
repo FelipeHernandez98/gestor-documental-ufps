@@ -1,4 +1,5 @@
-import { Column, Entity } from "typeorm";
+import { Agreement } from "src/agreement/entities/agreement.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
 @Entity({name: 'self_appraisal'})
 export class SelfAppraisal {
@@ -6,9 +7,12 @@ export class SelfAppraisal {
     @Column('int',{
         unique: true
     })
+    @PrimaryColumn()
     self_appr_id: number;
 
     @Column('int')
+    /* @ManyToOne(() => Agreement)
+    @JoinColumn({ name: 'agreement_id' }) */
     agreement_id: number;
 
     @Column('int')
