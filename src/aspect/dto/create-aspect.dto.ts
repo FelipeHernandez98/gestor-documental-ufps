@@ -23,5 +23,5 @@ export class CreateAspectDto {
     weighing: number;
 
     @IsBoolean()
-    editanle: boolean;
+    editable: boolean;
 }

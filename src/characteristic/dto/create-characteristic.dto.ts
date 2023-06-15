@@ -21,5 +21,5 @@ export class CreateCharacteristicDto {
     weighing: number;
 
     @IsBoolean()
-    editanle: boolean;
+    editable: boolean;
 }
